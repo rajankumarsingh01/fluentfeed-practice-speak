@@ -23,3 +23,13 @@ export interface EvaluationResult {
   suggestions: string[];
   createdAt: string;
 }
+
+export interface HistoryItem {
+  id: string;
+  topic: string;
+  grammarScore: number;
+  vocabularyScore: number;
+  overallScore: number;
+  suggestions: string[];
+  createdAt: string;
+}

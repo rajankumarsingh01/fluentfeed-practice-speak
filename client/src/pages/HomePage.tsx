@@ -13,9 +13,16 @@ const HomePage = () => {
 
       <Link
         to="/speaking"
-        className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition mb-4"
+        className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition mb-3"
       >
         Start Speaking Practice
+      </Link>
+
+      <Link
+        to="/history"
+        className="text-indigo-600 font-medium hover:underline mb-4"
+      >
+        View My Progress →
       </Link>
 
       <button

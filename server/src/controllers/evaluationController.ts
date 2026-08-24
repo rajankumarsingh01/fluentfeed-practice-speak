@@ -58,3 +58,32 @@ export const evaluateResponse = async (req: AuthRequest, res: Response): Promise
     });
   }
 };
+
+// GET /api/evaluate/history  (protected route)
+export const getEvaluationHistory = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.userId) {
+      res.status(401).json({ message: "Not authorized" });
+      return;
+    }
+
+    const evaluations = await Evaluation.find({ userId: req.userId })
+      .sort({ createdAt: -1 }) // most recent first
+      .select("topic grammarScore vocabularyScore overallScore suggestions createdAt");
+
+    res.status(200).json(
+      evaluations.map((evalDoc) => ({
+        id: evalDoc._id,
+        topic: evalDoc.topic,
+        grammarScore: evalDoc.grammarScore,
+        vocabularyScore: evalDoc.vocabularyScore,
+        overallScore: evalDoc.overallScore,
+        suggestions: evalDoc.suggestions,
+        createdAt: evalDoc.createdAt,
+      }))
+    );
+  } catch (error) {
+    console.error("Fetch history error:", error);
+    res.status(500).json({ message: "Failed to load evaluation history" });
+  }
+};
