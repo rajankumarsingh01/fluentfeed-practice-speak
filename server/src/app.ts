@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
+import { errorHandler } from "./middleware/errorMiddleware";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(errorHandler);
 
 
 app.use("/api/auth", authRoutes);
