@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
+import topicRoutes from "./routes/topicRoutes";
 import { errorHandler } from "./middleware/errorMiddleware";
 
 dotenv.config();
@@ -16,14 +17,17 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(errorHandler);
 
-
-app.use("/api/auth", authRoutes);
-
-// Health check route (we'll add real routes in later phases)
+// Health check route
 app.get("/api/health", (req: Request, res: Response) => {
   res.json({ status: "ok", message: "FluentFeed server is running" });
 });
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/topics", topicRoutes);
+
+// Error handler (must be last, after all routes)
+app.use(errorHandler);
 
 export default app;

@@ -1,0 +1,17 @@
+export const topics: string[] = [
+  "Describe your favorite hobby and why you enjoy it.",
+  "Talk about a place you would love to visit and why.",
+  "Describe a memorable event from your childhood.",
+  "What is your opinion on the importance of learning English?",
+  "Describe your daily routine on a typical weekday.",
+  "Talk about a book or movie that had a strong impact on you.",
+  "Describe a person who has inspired you in your life.",
+  "What are the advantages and disadvantages of social media?",
+  "Talk about a skill you would like to learn and why.",
+  "Describe your hometown and what makes it special.",
+  "What is your opinion on working from home versus working in an office?",
+  "Talk about a challenge you faced and how you overcame it.",
+  "Describe your favorite type of food and why you like it.",
+  "What changes would you like to see in your city in the next 10 years?",
+  "Talk about the importance of friendship in a person's life.",
+];
