@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
 import topicRoutes from "./routes/topicRoutes";
+import evaluationRoutes from "./routes/evaluationRoutes";
 import { errorHandler } from "./middleware/errorMiddleware";
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.get("/api/health", (req: Request, res: Response) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/topics", topicRoutes);
+app.use("/api/evaluate", evaluationRoutes);
 
 // Error handler (must be last, after all routes)
 app.use(errorHandler);
