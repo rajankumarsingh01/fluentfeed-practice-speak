@@ -46,10 +46,10 @@ const HistoryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-paper px-4 py-10 md:py-14">
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="font-display text-2xl font-bold text-ink">Your progress</h1>
+    <div className="min-h-screen bg-paper px-4 py-6 sm:px-6 sm:py-10 md:py-14">
+      <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <h1 className="font-display text-xl sm:text-2xl font-bold text-ink">Your progress</h1>
           <Link to="/" className="text-sm text-primary hover:underline font-medium">
             ← Back to home
           </Link>
@@ -90,21 +90,21 @@ const HistoryPage = () => {
                 >
                   <button
                     onClick={() => toggleExpand(item.id)}
-                    className="w-full text-left p-5 hover:bg-paper/60 transition"
+                    className="w-full text-left p-4 sm:p-5 hover:bg-paper/60 transition"
                   >
-                    <div className="flex items-start justify-between gap-4 mb-2">
-                      <p className="font-medium text-ink flex-1">{item.topic}</p>
-                      <span className={`text-lg font-bold ${scoreColor(item.overallScore)}`}>
+                    <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
+                      <p className="font-medium text-ink flex-1 min-w-[60%] break-words">{item.topic}</p>
+                      <span className={`text-lg font-bold shrink-0 ${scoreColor(item.overallScore)}`}>
                         {item.overallScore.toFixed(1)}/10
                       </span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between flex-wrap gap-1">
                       <p className="text-xs text-ink-soft">{formatDate(item.createdAt)}</p>
                       <span className="text-xs text-primary font-medium">
                         {isOpen ? "Hide details ▲" : "View details ▼"}
                       </span>
                     </div>
-                    <div className="flex gap-4 text-sm mt-3">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm mt-3">
                       <span className="text-ink-soft">
                         Grammar: <span className={`font-medium ${scoreColor(item.grammarScore)}`}>{item.grammarScore.toFixed(1)}</span>
                       </span>
@@ -115,7 +115,7 @@ const HistoryPage = () => {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 border-t border-black/5">
+                    <div className="px-4 sm:px-5 pb-5 pt-1 border-t border-black/5">
                       <h4 className="text-xs font-semibold text-ink-soft uppercase tracking-wider mb-2 mt-3">
                         Suggestions for improvement
                       </h4>

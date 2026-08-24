@@ -187,7 +187,7 @@ const RecordingInterface = ({ onSubmit, isSubmitting }: RecordingInterfaceProps)
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-black/5 shadow-[0_1px_2px_rgba(16,10,60,0.04),0_12px_24px_-16px_rgba(16,10,60,0.15)] p-6 space-y-5">
+    <div className="bg-white rounded-2xl border border-black/5 shadow-[0_1px_2px_rgba(16,10,60,0.04),0_12px_24px_-16px_rgba(16,10,60,0.15)] p-4 sm:p-6 space-y-5">
       {!isRecording && wordCount === 0 && !micError && (
         <div className="flex items-start gap-2.5 bg-primary-soft text-primary text-sm px-4 py-3 rounded-xl">
           <span className="mt-0.5">💡</span>
@@ -199,7 +199,7 @@ const RecordingInterface = ({ onSubmit, isSubmitting }: RecordingInterfaceProps)
         <div className="bg-red-50 text-danger text-sm px-4 py-3 rounded-xl">{micError}</div>
       )}
 
-      <div className="min-h-[160px] bg-paper rounded-xl p-4 text-ink leading-relaxed border border-black/5">
+      <div className="min-h-[160px] bg-paper rounded-xl p-4 text-ink leading-relaxed border border-black/5 break-words">
         {transcript ? (
           transcript
         ) : (
@@ -239,7 +239,7 @@ const RecordingInterface = ({ onSubmit, isSubmitting }: RecordingInterfaceProps)
         )}
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         {!isRecording ? (
           <button
             onClick={handleStart}
