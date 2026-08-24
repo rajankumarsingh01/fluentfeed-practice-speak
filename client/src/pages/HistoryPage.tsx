@@ -14,15 +14,16 @@ const formatDate = (dateString: string): string => {
 };
 
 const scoreColor = (score: number): string => {
-  if (score >= 7) return "text-green-600";
-  if (score >= 4) return "text-amber-600";
-  return "text-red-600";
+  if (score >= 7) return "text-success";
+  if (score >= 4) return "text-warning";
+  return "text-danger";
 };
 
 const HistoryPage = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -40,61 +41,100 @@ const HistoryPage = () => {
     fetchHistory();
   }, []);
 
+  const toggleExpand = (id: string) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-10">
+    <div className="min-h-screen bg-paper px-4 py-10 md:py-14">
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">Your Progress</h1>
-          <Link to="/" className="text-sm text-indigo-600 hover:underline font-medium">
-            ← Back to Home
+          <h1 className="font-display text-2xl font-bold text-ink">Your progress</h1>
+          <Link to="/" className="text-sm text-primary hover:underline font-medium">
+            ← Back to home
           </Link>
         </div>
 
         {isLoading && (
-          <div className="bg-white rounded-2xl shadow-md p-8 text-center text-gray-400">
-            Loading your history...
+          <div className="bg-white rounded-2xl border border-black/5 p-8 text-center text-ink-soft">
+            Loading your history…
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">{error}</div>
+          <div className="bg-red-50 text-danger text-sm px-4 py-3 rounded-xl">{error}</div>
         )}
 
         {!isLoading && !error && history.length === 0 && (
-          <div className="bg-white rounded-2xl shadow-md p-8 text-center">
-            <p className="text-gray-500 mb-4">
+          <div className="bg-white rounded-2xl border border-black/5 p-8 text-center">
+            <p className="text-ink-soft mb-4">
               You haven't completed any speaking evaluations yet.
             </p>
             <Link
               to="/speaking"
-              className="inline-block bg-indigo-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition"
+              className="inline-block bg-primary text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-dark transition"
             >
-              Start Your First Evaluation
+              Start your first evaluation
             </Link>
           </div>
         )}
 
         {!isLoading && history.length > 0 && (
           <div className="space-y-3">
-            {history.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl shadow-md p-5">
-                <div className="flex items-start justify-between gap-4 mb-2">
-                  <p className="font-medium text-gray-800 flex-1">{item.topic}</p>
-                  <span className={`text-lg font-bold ${scoreColor(item.overallScore)}`}>
-                    {item.overallScore.toFixed(1)}/10
-                  </span>
+            {history.map((item) => {
+              const isOpen = expandedId === item.id;
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-2xl border border-black/5 shadow-[0_1px_2px_rgba(16,10,60,0.04)] overflow-hidden"
+                >
+                  <button
+                    onClick={() => toggleExpand(item.id)}
+                    className="w-full text-left p-5 hover:bg-paper/60 transition"
+                  >
+                    <div className="flex items-start justify-between gap-4 mb-2">
+                      <p className="font-medium text-ink flex-1">{item.topic}</p>
+                      <span className={`text-lg font-bold ${scoreColor(item.overallScore)}`}>
+                        {item.overallScore.toFixed(1)}/10
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-ink-soft">{formatDate(item.createdAt)}</p>
+                      <span className="text-xs text-primary font-medium">
+                        {isOpen ? "Hide details ▲" : "View details ▼"}
+                      </span>
+                    </div>
+                    <div className="flex gap-4 text-sm mt-3">
+                      <span className="text-ink-soft">
+                        Grammar: <span className={`font-medium ${scoreColor(item.grammarScore)}`}>{item.grammarScore.toFixed(1)}</span>
+                      </span>
+                      <span className="text-ink-soft">
+                        Vocabulary: <span className={`font-medium ${scoreColor(item.vocabularyScore)}`}>{item.vocabularyScore.toFixed(1)}</span>
+                      </span>
+                    </div>
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-5 pb-5 pt-1 border-t border-black/5">
+                      <h4 className="text-xs font-semibold text-ink-soft uppercase tracking-wider mb-2 mt-3">
+                        Suggestions for improvement
+                      </h4>
+                      <ul className="space-y-2">
+                        {item.suggestions.map((suggestion, i) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-2.5 text-sm text-ink bg-paper rounded-xl px-3.5 py-2.5"
+                          >
+                            <span className="text-accent mt-0.5">●</span>
+                            <span>{suggestion}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-                <p className="text-xs text-gray-400 mb-3">{formatDate(item.createdAt)}</p>
-                <div className="flex gap-4 text-sm">
-                  <span className="text-gray-600">
-                    Grammar: <span className={`font-medium ${scoreColor(item.grammarScore)}`}>{item.grammarScore.toFixed(1)}</span>
-                  </span>
-                  <span className="text-gray-600">
-                    Vocabulary: <span className={`font-medium ${scoreColor(item.vocabularyScore)}`}>{item.vocabularyScore.toFixed(1)}</span>
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -3,24 +3,13 @@ import { AuthRequest } from "../types";
 import { evaluateSpeech } from "../services/geminiService";
 import Evaluation from "../models/Evaluation";
 
-const MIN_WORDS = 100;
-const MAX_WORDS = 200;
-
 // POST /api/evaluate  (protected route)
 export const evaluateResponse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { topic, transcript } = req.body;
 
-    if (!topic || !transcript) {
-      res.status(400).json({ message: "Topic and transcript are required" });
-      return;
-    }
-
-    const wordCount = transcript.trim().split(/\s+/).length;
-    if (wordCount < MIN_WORDS || wordCount > MAX_WORDS) {
-      res.status(400).json({
-        message: `Transcript must be between ${MIN_WORDS} and ${MAX_WORDS} words (got ${wordCount})`,
-      });
+    if (!topic || !transcript || transcript.trim().length === 0) {
+      res.status(400).json({ message: "Topic and a non-empty transcript are required" });
       return;
     }
 
@@ -68,7 +57,7 @@ export const getEvaluationHistory = async (req: AuthRequest, res: Response): Pro
     }
 
     const evaluations = await Evaluation.find({ userId: req.userId })
-      .sort({ createdAt: -1 }) // most recent first
+      .sort({ createdAt: -1 })
       .select("topic grammarScore vocabularyScore overallScore suggestions createdAt");
 
     res.status(200).json(

@@ -1,36 +1,68 @@
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
+const WaveMark = () => (
+  <div className="flex items-end gap-[3px] h-5">
+    <span className="w-[3px] h-2 bg-primary rounded-full"></span>
+    <span className="w-[3px] h-5 bg-primary rounded-full"></span>
+    <span className="w-[3px] h-3 bg-accent rounded-full"></span>
+    <span className="w-[3px] h-4 bg-primary rounded-full"></span>
+  </div>
+);
+
 const HomePage = () => {
   const { user, logout } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-      <h1 className="text-3xl font-bold text-indigo-600 mb-2">
-        FluentFeed Speaking Evaluation
-      </h1>
-      <p className="text-gray-600 mb-6">Welcome, {user?.name} 👋</p>
+    <div className="min-h-screen bg-paper flex flex-col">
+      <header className="flex items-center justify-between px-6 md:px-12 py-6">
+        <div className="flex items-center gap-2.5">
+          <WaveMark />
+          <span className="font-display font-bold text-lg tracking-tight text-ink">
+            FluentFeed
+          </span>
+        </div>
+        <button
+          onClick={logout}
+          className="text-sm text-ink-soft hover:text-ink transition"
+        >
+          Log out
+        </button>
+      </header>
 
-      <Link
-        to="/speaking"
-        className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition mb-3"
-      >
-        Start Speaking Practice
-      </Link>
+      <main className="flex-1 flex items-center px-6 md:px-12">
+        <div className="max-w-xl">
+          <p className="text-sm font-medium text-primary mb-3">
+            Welcome back, {user?.name}
+          </p>
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-ink leading-[1.1] mb-4">
+            Find your voice
+            <br />
+            in English.
+          </h1>
+          <p className="text-ink-soft text-lg mb-8 max-w-md">
+            Speak on a topic for a couple of minutes and get instant feedback
+            on your grammar, vocabulary, and clarity.
+          </p>
 
-      <Link
-        to="/history"
-        className="text-indigo-600 font-medium hover:underline mb-4"
-      >
-        View My Progress →
-      </Link>
-
-      <button
-        onClick={logout}
-        className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-      >
-        Log Out
-      </button>
+          <div className="flex items-center gap-6 flex-wrap">
+            <Link
+              to="/speaking"
+              className="inline-flex items-center gap-2.5 bg-primary text-white px-6 py-3.5 rounded-xl font-medium hover:bg-primary-dark transition shadow-[0_10px_24px_-10px_rgba(91,79,233,0.55)]"
+            >
+              <WaveMark />
+              Start speaking practice
+            </Link>
+            <Link
+              to="/history"
+              className="text-ink font-medium hover:text-primary transition inline-flex items-center gap-1"
+            >
+              View my progress
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

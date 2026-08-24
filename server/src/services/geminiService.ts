@@ -4,20 +4,23 @@ import { GeminiEvaluationResult } from "../types";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
 
 const buildPrompt = (topic: string, transcript: string): string => {
-  return `You are an English speaking evaluator. A student was given this topic to speak about:
+  return `You are a strict, professional English speaking evaluator for a language-learning platform. A student was given this topic to speak about:
 
 Topic: "${topic}"
 
-Here is what they said (transcribed from speech):
+Here is their spoken response, transcribed from speech-to-text (minor transcription errors like missing punctuation are normal and should not be penalized):
 "${transcript}"
 
-Evaluate their spoken English response.
+Evaluate the response carefully and honestly. Follow these rules strictly:
 
-Scoring guidance:
-- grammarScore (0-10): correctness of sentence structure, tense usage, subject-verb agreement
-- vocabularyScore (0-10): range and appropriateness of vocabulary used, relevant to the topic
-- overallScore (0-10): overall fluency, coherence, and how well they addressed the topic
-- suggestions: 2-4 short, specific, actionable tips for improvement (not generic praise)`;
+1. First check: does the response actually address the given topic? If the student went off-topic, gave an unrelated answer, asked a question instead of answering, or the response is too short/incoherent to properly evaluate, the overallScore MUST be low (0-3), and grammarScore/vocabularyScore should also be capped low, with the top suggestion clearly stating that the response did not address the topic.
+2. grammarScore (0-10): correctness of sentence structure, tense usage, subject-verb agreement. A perfect 9-10 should be rare and only for genuinely error-free, well-structured speech.
+3. vocabularyScore (0-10): range, precision, and appropriateness of vocabulary used relative to the topic. A perfect 9-10 requires varied, precise, topic-relevant vocabulary.
+4. overallScore (0-10): overall fluency, coherence, relevance to the topic, and how well the student communicated their ideas. This should reflect genuine speaking ability, not just grammatical correctness.
+5. Be consistent: your suggestions must logically match your scores. Never give a high score while also pointing out a fundamental flaw (like not answering the topic) in the suggestions.
+6. suggestions: exactly 2-4 short, specific, actionable tips grounded in what the student actually said.
+
+Score realistically and critically, the way a strict IELTS/TOEFL speaking examiner would — do not default to high scores.`;
 };
 
 export const evaluateSpeech = async (
@@ -28,6 +31,7 @@ export const evaluateSpeech = async (
     model: "gemini-2.5-flash",
     contents: buildPrompt(topic, transcript),
     config: {
+      temperature: 0.3, // lower temperature = more consistent, less random scoring across runs
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,

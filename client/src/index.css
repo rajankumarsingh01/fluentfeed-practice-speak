@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+
+  --color-paper: #f6f5fb;
+  --color-ink: #1e1b2e;
+  --color-ink-soft: #6b6580;
+  --color-primary: #5b4fe9;
+  --color-primary-dark: #4638c2;
+  --color-primary-soft: #eeecfd;
+  --color-accent: #ff7a59;
+  --color-accent-soft: #ffede6;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.wave-bar {
+  animation: wave 0.9s ease-in-out infinite;
+  transform-origin: bottom;
+}

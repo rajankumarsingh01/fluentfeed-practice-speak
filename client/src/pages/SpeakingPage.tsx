@@ -58,9 +58,9 @@ const SpeakingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-10">
+    <div className="min-h-screen bg-paper px-4 py-10 md:py-14">
       <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold text-gray-800">Speaking Practice</h1>
+        <h1 className="font-display text-2xl font-bold text-ink">Speaking practice</h1>
 
         {result ? (
           <ResultsDisplay result={result} onTryAnother={handleTryAnother} />
@@ -74,15 +74,15 @@ const SpeakingPage = () => {
             />
 
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">
+              <div className="bg-red-50 text-danger text-sm px-4 py-3 rounded-xl">
                 {error}
               </div>
             )}
 
             {isSubmitting ? (
-              <div className="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center justify-center gap-3">
-                <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                <p className="text-gray-500 text-sm">Evaluating your response... this can take a few seconds.</p>
+              <div className="bg-white rounded-2xl border border-black/5 p-8 flex flex-col items-center justify-center gap-3">
+                <div className="w-8 h-8 border-4 border-primary-soft border-t-primary rounded-full animate-spin"></div>
+                <p className="text-ink-soft text-sm">Evaluating your response… this can take a few seconds.</p>
               </div>
             ) : (
               <RecordingInterface onSubmit={handleSubmit} isSubmitting={isSubmitting} />
