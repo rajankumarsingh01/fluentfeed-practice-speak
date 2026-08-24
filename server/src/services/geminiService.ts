@@ -1,7 +1,21 @@
-import { GoogleGenAI, Type } from "@google/genai";
+// @google/genai is an ESM-only package, so it must be loaded via dynamic
+// import() instead of a static import when this file compiles to CommonJS.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let aiClient: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let TypeEnum: any = null;
+
 import { GeminiEvaluationResult } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getAiClient = async (): Promise<{ ai: any; Type: any }> => {
+  if (!aiClient || !TypeEnum) {
+    const { GoogleGenAI, Type } = await import("@google/genai");
+    aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
+    TypeEnum = Type;
+  }
+  return { ai: aiClient, Type: TypeEnum };
+};
 
 const buildPrompt = (topic: string, transcript: string): string => {
   return `You are a strict, professional English speaking evaluator for a language-learning platform. A student was given this topic to speak about:
@@ -27,6 +41,8 @@ export const evaluateSpeech = async (
   topic: string,
   transcript: string
 ): Promise<GeminiEvaluationResult> => {
+  const { ai, Type } = await getAiClient();
+
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: buildPrompt(topic, transcript),
